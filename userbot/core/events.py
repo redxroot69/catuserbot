@@ -10,7 +10,7 @@
 import pathlib
 import typing
 
-from telethon import events, hints, types
+from telethon import TelegramClient, events, hints, types
 from telethon.tl.types import (
     InputPeerChannel,
     InputPeerChat,
@@ -180,7 +180,8 @@ async def send_message(
         str(Config.BOTLOG_CHATID),
         str(Config.PM_LOGGER_GROUP_ID),
     ]:
-        return await client.sendmessage(
+        return await TelegramClient.send_message(
+            client,
             entity=chatid,
             message=message,
             send_as=send_as,
@@ -209,7 +210,8 @@ async def send_message(
     safecheck = await safe_check_text(msg)
     if safecheck:
         if Config.BOTLOG:
-            response = await client.sendmessage(
+            response = await TelegramClient.send_message(
+                client,
                 entity=Config.BOTLOG_CHATID,
                 message=msg,
                 send_as=send_as,
@@ -236,7 +238,8 @@ async def send_message(
             )
         msglink = await client.get_msg_link(response)
         msg = f"__Sorry I can't send this message in public chats it may have some sensitive data So check in __[Bot log group]({msglink})."
-        return await client.sendmessage(
+        return await TelegramClient.send_message(
+            client,
             entity=chatid,
             message=msg,
             send_as=send_as,
@@ -261,7 +264,8 @@ async def send_message(
             spoiler=spoiler,
             comment_to=comment_to,
         )
-    return await client.sendmessage(
+    return await TelegramClient.send_message(
+        client,
         entity=chatid,
         message=msg,
         send_as=send_as,
@@ -333,7 +337,8 @@ async def send_file(
         )
     chatid = entity
     if str(chatid) == str(Config.BOTLOG_CHATID):
-        return await client.sendfile(
+        return await TelegramClient.send_file(
+            client,
             entity=Config.BOTLOG_CHATID,
             file=file,
             caption=caption,
@@ -373,7 +378,8 @@ async def send_file(
     safe_file_check = await safe_check_text(filemsg)
     if safecheck or safe_file_check:
         if Config.BOTLOG:
-            response = await client.sendfile(
+            response = await TelegramClient.send_file(
+                client,
                 entity=Config.BOTLOG_CHATID,
                 file=file,
                 caption=msg,
@@ -402,7 +408,8 @@ async def send_file(
             )
         msglink = await client.get_msg_link(response)
         msg = f"__Sorry I can't send this message in public chats it may have some sensitive data So check in __[Bot log group]({msglink})."
-        return await client.sendmessage(
+        return await TelegramClient.send_message(
+            client,
             entity=chatid,
             message=msg,
             reply_to=reply_to,
@@ -411,7 +418,8 @@ async def send_file(
             schedule=schedule,
             comment_to=comment_to,
         )
-    return await client.sendfile(
+    return await TelegramClient.send_file(
+        client,
         entity=chatid,
         file=file,
         caption=msg,
@@ -467,7 +475,8 @@ async def edit_message(
     else:
         chat_id = chatid
     if str(chat_id) == str(Config.BOTLOG_CHATID):
-        return await client.editmessage(
+        return await TelegramClient.edit_message(
+            client,
             entity=chatid,
             message=message,
             text=text,
@@ -487,7 +496,8 @@ async def edit_message(
     safecheck = await safe_check_text(main_msg)
     if safecheck:
         if Config.BOTLOG:
-            response = await client.sendmessage(
+            response = await TelegramClient.send_message(
+                client,
                 entity=Config.BOTLOG_CHATID,
                 message=main_msg,
                 parse_mode=parse_mode,
@@ -503,7 +513,8 @@ async def edit_message(
             )
         msglink = await client.get_msg_link(response)
         msg = f"__Sorry I can't send this message in public chats it may have some sensitive data So check in __[Bot log group]({msglink})."
-        return await client.editmessage(
+        return await TelegramClient.edit_message(
+            client,
             entity=chatid,
             message=message,
             text=msg,
@@ -518,7 +529,8 @@ async def edit_message(
             supports_streaming=supports_streaming,
             schedule=schedule,
         )
-    return await client.editmessage(
+    return await TelegramClient.edit_message(
+        client,
         entity=chatid,
         message=message,
         text=main_msg,
